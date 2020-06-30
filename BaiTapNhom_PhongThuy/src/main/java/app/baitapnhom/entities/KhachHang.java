@@ -6,77 +6,94 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Nationalized;
 
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "khachhang")
 public class KhachHang implements Serializable {
 	@Id
-	private String makh;
-	private String tenkh;
+	private String ma;
+	@Nationalized
+	private String ho;
+	
+	@Nationalized
+	private String ten;
+	
 	private String sdt;
 	private String email;
+	@Nationalized
 	private String gioitinh;
 	private LocalDate ngaysinh;
-	@Column(name = "authority")
-	private String quyen;
 	@OneToMany(cascade = CascadeType.ALL)
-	@CollectionTable(
-			
-			)
+	@CollectionTable()
 	private List<DiaChi> listdiachi;
-	
-	@OneToMany(mappedBy = "kh",fetch = FetchType.EAGER)
+
+	@OneToOne
+	private TaiKhoan taikhoan;
+
+	@OneToMany(mappedBy = "kh", fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<HoaDon> listhoadon;
-	
+
 	public KhachHang() {
 		super();
 	}
+
+	public KhachHang(String makh,String hokh, String tenkh, String sdt, String email, String gioitinh, LocalDate ngaysinh) {
+		super();
+		this.ma = makh;
+		this.ho = hokh;
+		this.ten = tenkh;
+		this.sdt = sdt;
+		this.email = email;
+		this.gioitinh = gioitinh;
+		this.ngaysinh = ngaysinh;
+	}
+
+	public KhachHang(String tenkh,String hokh,String sdt, String email, String gioitinh, LocalDate ngaysinh) {
+		super();
+		this.ten = tenkh;
+		this.ho = hokh;
+		this.sdt = sdt;
+		this.email = email;
+		this.gioitinh = gioitinh;
+		this.ngaysinh = ngaysinh;
+	}
+
 	
 
-	public KhachHang(String makh, String tenkh, String sdt, String email, String gioitinh, LocalDate ngaysinh,
-			String quyen) {
-		super();
-		this.makh = makh;
-		this.tenkh = tenkh;
-		this.sdt = sdt;
-		this.email = email;
-		this.gioitinh = gioitinh;
-		this.ngaysinh = ngaysinh;
-		this.quyen = quyen;
+	public String getMa() {
+		return ma;
 	}
 
-
-	public KhachHang(String tenkh, String sdt, String email, String gioitinh, LocalDate ngaysinh, String quyen) {
-		super();
-		this.tenkh = tenkh;
-		this.sdt = sdt;
-		this.email = email;
-		this.gioitinh = gioitinh;
-		this.ngaysinh = ngaysinh;
-		this.quyen = quyen;
+	public void setMa(String ma) {
+		this.ma = ma;
 	}
 
-	public String getMakh() {
-		return makh;
+	public String getHo() {
+		return ho;
 	}
 
-	public void setMakh(String makh) {
-		this.makh = makh;
+	public void setHo(String ho) {
+		this.ho = ho;
 	}
 
-	public String getTenkh() {
-		return tenkh;
+	public String getTen() {
+		return ten;
 	}
 
-	public void setTenkh(String tenkh) {
-		this.tenkh = tenkh;
+	public void setTen(String ten) {
+		this.ten = ten;
 	}
 
 	public String getSdt() {
@@ -111,14 +128,6 @@ public class KhachHang implements Serializable {
 		this.ngaysinh = ngaysinh;
 	}
 
-	public String getQuyen() {
-		return quyen;
-	}
-
-	public void setQuyen(String quyen) {
-		this.quyen = quyen;
-	}
-
 	public List<DiaChi> getListdiachi() {
 		return listdiachi;
 	}
@@ -126,9 +135,15 @@ public class KhachHang implements Serializable {
 	public void setListdiachi(List<DiaChi> listdiachi) {
 		this.listdiachi = listdiachi;
 	}
-	
-	
-	
+
+	public TaiKhoan getTaikhoan() {
+		return taikhoan;
+	}
+
+	public void setTaikhoan(TaiKhoan taikhoan) {
+		this.taikhoan = taikhoan;
+	}
+
 	public List<HoaDon> getListhoadon() {
 		return listhoadon;
 	}
@@ -138,16 +153,10 @@ public class KhachHang implements Serializable {
 	}
 
 	@Override
-	public String toString() {
-		return "KhachHang [makh=" + makh + ", tenkh=" + tenkh + ", sdt=" + sdt + ", email=" + email + ", gioitinh="
-				+ gioitinh + ", ngaysinh=" + ngaysinh + ", quyen=" + quyen + ", listdiachi=" + listdiachi + "]";
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((makh == null) ? 0 : makh.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		return result;
 	}
 
@@ -160,15 +169,16 @@ public class KhachHang implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		KhachHang other = (KhachHang) obj;
-		if (makh == null) {
-			if (other.makh != null)
+		if (email == null) {
+			if (other.email != null)
 				return false;
-		} else if (!makh.equals(other.makh))
+		} else if (!email.equals(other.email))
 			return false;
 		return true;
 	}
 	
 	
+
 	
 
 }

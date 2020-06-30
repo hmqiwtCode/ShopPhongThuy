@@ -15,7 +15,7 @@ import org.hibernate.annotations.Nationalized;
 public class LoaiSanPham implements Serializable {
 	@Id
 	private String maloai;
-	@Column(columnDefinition = "nvarchar")
+	@Nationalized
 	private String tenloai;
 	
 	@OneToMany(mappedBy = "loaisp")

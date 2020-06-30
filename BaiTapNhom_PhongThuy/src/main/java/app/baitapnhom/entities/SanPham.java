@@ -4,22 +4,31 @@ import java.io.Serializable;
 
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Nationalized;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "sanpham")
 public class SanPham implements Serializable{
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int masp;
+	@Nationalized
 	private String tensp;
+	
 	private int soluongton;
 	private double gianhap;
 	private double giaban;
+	
 	private String urlhinh;
 	
 	@ManyToOne
@@ -30,7 +39,7 @@ public class SanPham implements Serializable{
 	@JoinColumn(name = "loaisp")
 	private LoaiSanPham loaisp;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "nhacc")
 	private NhaCungCap nhacc;
 

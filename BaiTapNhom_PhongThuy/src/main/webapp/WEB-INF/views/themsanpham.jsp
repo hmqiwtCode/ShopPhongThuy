@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form:form modelAttribute="sp" action="hienthisanpham" method="post" enctype="multipart/form-data">
+	<form:form modelAttribute="sp" action="hienthisanpham" method="POST" enctype="multipart/form-data">
 		<form:input path="tensp" placeholder="Tên sản phẩm"/><br/>
 		<form:input path="soluongton" placeholder="Số lượng"/><br/>
 		<form:input path="gianhap" placeholder="Giá nhập"/><br/>

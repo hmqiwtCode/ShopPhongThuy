@@ -30,4 +30,10 @@ public class SanPhamServiceImpl implements SanPhamService {
 		return check;
 	}
 
+	@Override
+	@Transactional
+	public SanPham getSanPhamByID(int id) {
+		return spDAO.getSanPhamByID(id);
+	}
+
 }

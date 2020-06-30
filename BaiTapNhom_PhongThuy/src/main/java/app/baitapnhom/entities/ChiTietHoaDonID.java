@@ -8,11 +8,11 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class ChiTietHoaDonID implements Serializable {
 	private String hoadon;
-	private String sanpham;
+	private int sanpham;
 	public ChiTietHoaDonID() {
 		super();
 	}
-	public ChiTietHoaDonID(String hoadon, String sanpham) {
+	public ChiTietHoaDonID(String hoadon, int sanpham) {
 		super();
 		this.hoadon = hoadon;
 		this.sanpham = sanpham;
@@ -23,10 +23,10 @@ public class ChiTietHoaDonID implements Serializable {
 	public void setHoadon(String hoadon) {
 		this.hoadon = hoadon;
 	}
-	public String getSanpham() {
+	public int getSanpham() {
 		return sanpham;
 	}
-	public void setSanpham(String sanpham) {
+	public void setSanpham(int sanpham) {
 		this.sanpham = sanpham;
 	}
 	@Override
@@ -38,7 +38,7 @@ public class ChiTietHoaDonID implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((hoadon == null) ? 0 : hoadon.hashCode());
-		result = prime * result + ((sanpham == null) ? 0 : sanpham.hashCode());
+		result = prime * result + sanpham;
 		return result;
 	}
 	@Override
@@ -55,13 +55,11 @@ public class ChiTietHoaDonID implements Serializable {
 				return false;
 		} else if (!hoadon.equals(other.hoadon))
 			return false;
-		if (sanpham == null) {
-			if (other.sanpham != null)
-				return false;
-		} else if (!sanpham.equals(other.sanpham))
+		if (sanpham != other.sanpham)
 			return false;
 		return true;
 	}
+	
 	
 	
 

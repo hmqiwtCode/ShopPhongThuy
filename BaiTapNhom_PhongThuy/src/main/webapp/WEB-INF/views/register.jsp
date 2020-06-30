@@ -102,10 +102,11 @@ section {
 									<span class="fa fa-1x fa-user-circle"></span>
 								</div>
 							</div>
-							<form:input cssClass="form-control" path="makh"
+							<form:input cssClass="form-control" path="ma"
 								placeholder="Tên tài khoản" />
 						</div>
 						<span class="help-block" id="error"></span>
+						<span  id="dup"></span>
 					</div>
 					<div class="row">
 
@@ -116,8 +117,8 @@ section {
 										<i class="fa fa-id-badge" aria-hidden="true"></i>
 									</div>
 								</div>
-								<input name="ho" id="ho" type="text" class="form-control"
-									placeholder="Họ">
+								<form:input path="ho" cssClass="form-control"
+									placeholder="Họ" />
 							</div>
 							<span class="help-block" id="error"></span>
 						</div>
@@ -129,8 +130,8 @@ section {
 										<i class="fa fa-id-badge" aria-hidden="true"></i>
 									</div>
 								</div>
-								<input name="ten" type="text" class="form-control"
-									placeholder="Tên">
+								<form:input path="ten" type="text" cssClass="form-control"
+									placeholder="Tên" />
 							</div>
 							<span class="help-block" id="error"></span>
 						</div>
@@ -144,8 +145,8 @@ section {
 									<span class="glyphicon glyphicon-envelope">@</span>
 								</div>
 							</div>
-							<input name="email" type="text" class="form-control"
-								placeholder="Email">
+							<form:input path="email"  cssClass="form-control"
+								placeholder="Email" />
 						</div>
 						<span class="help-block" id="error"></span>
 					</div>
@@ -158,8 +159,8 @@ section {
 									<span>+84</span>
 								</div>
 							</div>
-							<input name="sodienthoai" type="number" class="form-control"
-								placeholder="Số điện thoại">
+							<form:input path="sdt" type="number" cssClass="form-control"
+								placeholder="Số điện thoại" />
 						</div>
 						<span class="help-block" id="error"></span>
 					</div>
@@ -219,13 +220,15 @@ section {
 								<div style="margin-left: 5px;"
 									class="custom-control custom-radio custom-control-inline">
 									<form:radiobutton path="gioitinh" value="Nam"
-										cssClass="custom-radio" checked="checked" cssStyle="margin-top:5px;margin-right:3px;" />
+										cssClass="custom-radio" checked="checked"
+										cssStyle="margin-top:5px;margin-right:3px;" />
 									<label for="">Nam</label>
 
 
 								</div>
 								<div class="custom-control custom-radio custom-control-inline">
-									<form:radiobutton path="gioitinh" value="Nữ" cssStyle="margin-top:5px;margin-right:3px;"/>
+									<form:radiobutton path="gioitinh" value="Nữ"
+										cssStyle="margin-top:5px;margin-right:3px;" />
 									<label for="gioitinh">Nữ</label>
 								</div>
 
@@ -304,6 +307,7 @@ section {
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous"></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="resources/js/jquery.validate.min.js"></script>
 	<script src="resources/js/register.js"></script>
 </body>

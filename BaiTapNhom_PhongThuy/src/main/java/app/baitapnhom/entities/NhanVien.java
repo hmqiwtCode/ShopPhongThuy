@@ -5,17 +5,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Nationalized;
 
 @SuppressWarnings("serial")
 @Entity
@@ -23,9 +23,16 @@ import javax.persistence.UniqueConstraint;
 public class NhanVien implements Serializable {
 	@Id
 	@Column(name = "manv", nullable = false)
-	private String manv;
+	private String ma;
+	
+	@Column(name = "honv", nullable = false)
+	@Nationalized
+	private String ho;
+	
+	
 	@Column(name = "tennv", nullable = false)
-	private String tennv;
+	@Nationalized
+	private String ten;
 	@Column(name = "sdt", nullable = false)
 	private String sdt;
 	@Column(name = "email", nullable = false)
@@ -36,19 +43,18 @@ public class NhanVien implements Serializable {
 	private LocalDate ngaysinh;
 	@OneToOne(cascade = CascadeType.ALL)
 	private DiaChi diachi;
-	@ElementCollection
-	@CollectionTable(name = "authorites", joinColumns = @JoinColumn(name = "manv"), uniqueConstraints = @UniqueConstraint(columnNames = {
-			"manv", "authority" }))
-	@Column(name = "authority", nullable = false)
-	private List<String> quyen;
+	@OneToOne
+	private TaiKhoan taikhoan;
 
 	@OneToMany(mappedBy = "nv", fetch = FetchType.EAGER) // con cho nay nua mappedBy
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<HoaDon> listhd;
 
-	public NhanVien(String manv, String tennv, String sdt, String email, String gioitinh, LocalDate ngaysinh) {
+	public NhanVien(String manv,String ho, String tennv, String sdt, String email, String gioitinh, LocalDate ngaysinh) {
 		super();
-		this.manv = manv;
-		this.tennv = tennv;
+		this.ma = manv;
+		this.ho = ho;
+		this.ten = tennv;
 		this.sdt = sdt;
 		this.email = email;
 		this.gioitinh = gioitinh;
@@ -59,20 +65,30 @@ public class NhanVien implements Serializable {
 		super();
 	}
 
-	public String getManv() {
-		return manv;
+	public String getMa() {
+		return ma;
 	}
 
-	public void setManv(String manv) {
-		this.manv = manv;
+	public void setMa(String ma) {
+		this.ma = ma;
 	}
 
-	public String getTennv() {
-		return tennv;
+	
+	
+	public String getHo() {
+		return ho;
 	}
 
-	public void setTennv(String tennv) {
-		this.tennv = tennv;
+	public void setHo(String ho) {
+		this.ho = ho;
+	}
+
+	public String getTen() {
+		return ten;
+	}
+
+	public void setTen(String ten) {
+		this.ten = ten;
 	}
 
 	public String getSdt() {
@@ -115,12 +131,12 @@ public class NhanVien implements Serializable {
 		this.diachi = diachi;
 	}
 
-	public List<String> getQuyen() {
-		return quyen;
+	public TaiKhoan getTaikhoan() {
+		return taikhoan;
 	}
 
-	public void setQuyen(List<String> quyen) {
-		this.quyen = quyen;
+	public void setTaikhoan(TaiKhoan taikhoan) {
+		this.taikhoan = taikhoan;
 	}
 
 	public List<HoaDon> getListhd() {
@@ -132,17 +148,10 @@ public class NhanVien implements Serializable {
 	}
 
 	@Override
-	public String toString() {
-		return "NhanVien [manv=" + manv + ", tennv=" + tennv + ", sdt=" + sdt + ", email=" + email + ", gioitinh="
-				+ gioitinh + ", ngaysinh=" + ngaysinh + ", diachi=" + diachi + ", quyen=" + quyen + ", listhd=" + listhd
-				+ "]";
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((manv == null) ? 0 : manv.hashCode());
+		result = prime * result + ((ma == null) ? 0 : ma.hashCode());
 		return result;
 	}
 
@@ -155,12 +164,14 @@ public class NhanVien implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		NhanVien other = (NhanVien) obj;
-		if (manv == null) {
-			if (other.manv != null)
+		if (ma == null) {
+			if (other.ma != null)
 				return false;
-		} else if (!manv.equals(other.manv))
+		} else if (!ma.equals(other.ma))
 			return false;
 		return true;
 	}
+
+	
 
 }

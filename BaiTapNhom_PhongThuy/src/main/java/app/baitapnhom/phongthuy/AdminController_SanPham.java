@@ -1,10 +1,12 @@
 package app.baitapnhom.phongthuy;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -105,19 +107,13 @@ public class AdminController_SanPham {
 		thaoTacLoaiSP.Them(loaisp);
 		return "OK";
 	}
+	
 
 	private void saveImage(HttpServletRequest request, MultipartFile multipartFile, SanPham sp) throws IOException {
-		String fileName = "";
-		List<SanPham> listSP = spService.getTatCaSanPham();
-		if (listSP.size() == 0)
-			fileName = "1";
-		else
-			fileName = String.valueOf(listSP.size() + 1);
-
 		InputStream stream = multipartFile.getInputStream();
 		byte[] data = new byte[stream.available()];
 		stream.read(data);
-		String tenHinh = fileName + "." + multipartFile.getOriginalFilename().split("\\.")[1];
+		String tenHinh = randomNameFile(request) + "." + multipartFile.getOriginalFilename().split("\\.")[1];
 		sp.setUrlhinh(tenHinh);
 		spService.themSanPham(sp);
 		@SuppressWarnings("deprecation")
@@ -126,6 +122,45 @@ public class AdminController_SanPham {
 		fos.write(data);
 		fos.close();
 	}
+	
+	private String randomNameFile(HttpServletRequest request) {
+        List<String> getName = new ArrayList<String>();
+        
+        File folder = new File(request.getRealPath("resources/imguploads/"));
+        File[] listOfFiles = folder.listFiles();
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+          if (listOfFiles[i].isFile()) {
+            getName.add(listOfFiles[i].getName().split("\\.")[0]);
+            System.out.println(listOfFiles[i].getName());
+          }
+        }
+        String name = fileNameA();
+        if(!(getName.contains(name)))
+        		return name;
+        else {
+        	while(true) {
+        		name = fileNameA();
+            	if(getName.contains(name) == false)
+            		return name;
+        	}
+        }
+	}
+	
+	private String fileNameA() {
+		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+		Random rnd = new Random();
+        while (salt.length() < 15) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+        
+	}
+	
+	
 	
 	
 

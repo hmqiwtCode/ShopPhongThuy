@@ -37,6 +37,12 @@ public class SanPhamDAOImpl implements SanPhamDAO {
 		}
 	}
 
+	@Override
+	public SanPham getSanPhamByID(int id) {
+		Session session = sessionFactory.getCurrentSession();
+		return session.find(SanPham.class, id);
+	}
+
 	
 	
 

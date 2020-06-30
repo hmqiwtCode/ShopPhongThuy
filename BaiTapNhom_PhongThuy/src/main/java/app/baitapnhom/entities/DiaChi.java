@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.Nationalized;
+
 @SuppressWarnings("serial")
 @Entity
 public class DiaChi implements Serializable {
@@ -16,14 +18,19 @@ public class DiaChi implements Serializable {
 	@Column(name="madc")
 	private int madiachi;
 	@Column(name="sonha")
+	@Nationalized
 	private String sonha;
 	@Column(name="duong")
+	@Nationalized
 	private String duong;
 	@Column(name="phuong")
+	@Nationalized
 	private String phuong;
 	@Column(name="quan")
+	@Nationalized
 	private String quan;
 	@Column(name="thanhpho")
+	@Nationalized
 	private String thanhpho;
 	public DiaChi(String sonha, String duong, String phuong, String quan, String thanhpho) {
 		super();

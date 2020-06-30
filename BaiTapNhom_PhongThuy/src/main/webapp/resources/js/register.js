@@ -1,7 +1,3 @@
-
-
-// JavaScript Validation For Registration Page
-
 $(document).ready(function()
 { 		 
 		 // name validation
@@ -27,15 +23,15 @@ $(document).ready(function()
 					validname: true,
 					minlength: 8
 				},
-				ten: {
+				tenkh: {
 					required: true,
 					minlength: 4
 				},
-				ho: {
+				hokh: {
 					required: true,
 					minlength: 4
 				},
-				sodienthoai: {
+				sdt: {
 					required: true,
                     minlength: 10,
                     maxlength:10
@@ -44,7 +40,7 @@ $(document).ready(function()
 					required: true,
 					validemail: true
 				},
-				ngaysinh: {
+				ngaysinh1: {
 					required: true,
 				},
 				password: {
@@ -64,21 +60,21 @@ $(document).ready(function()
 					validname: "Tên không chứa ký tự đặc biệt",
 					minlength: "Tối thiểu 8 ký tự"
 				},
-				ngaysinh:{
+				ngaysinh1:{
 					required: "Nhập ngày sinh"
 				},
-				ho:{
+				hokh:{
 					required: "Nhập họ",
 					validname: "Tên không chứa ký tự đặc biệt",
 					minlength: "Tối thiểu 4 ký tự"
 				},
-				ten:{
+				tenkh:{
 					required: "Nhập tên",
 					validname: "Tên không chứa ký tự đặc biệt",
 					minlength: "Tối thiểu 4 ký tự"
 				},
-				sodienthoai:{
-					required: "Nhập tên tài khoản",
+				sdt:{
+					required: "Nhập số điện thoại",
 					validname: "Tên không chứa ký tự đặc biệt",
 				},
 			    email: {
@@ -106,7 +102,40 @@ $(document).ready(function()
 		   },
 		   
 		   submitHandler: function(form) {
-                    form.submit();
+			   $.ajax({
+		            url: form.action,
+		            type: form.method,
+		            data: $(form).serialize(),
+		            success: function(response) {
+		            	if(response === "Tài khoản này đã tồn tại trong hệ thống"){
+		            		swal({
+								icon: "error",
+							    title: "Tài khoản này đã tồn tại trong hệ thống",
+							    text: "Xin vui lòng nhập tài khoản mới",
+							    type: "error"
+							})
+		            	}else if(response === "Email này đã tồn tại trong hệ thống"){
+		            		swal({
+								icon: "error",
+							    title: "Email này đã tồn tại trong hệ thống",
+							    text: "Xin vui lòng nhập email mới",
+							    type: "error"
+							})
+		            	}else{
+		            		swal({
+								icon: "success",
+							    title: "Đăng ký tài khoản thành công",
+							    text: "Thành công vui lòng đăng nhập",
+							    type: "success"
+							}).then(function() {
+							    window.location = "checkout/shipping";
+							});
+		            	}
+		            },
+		            error:function(result) {
+		            	console.log("fail");
+		            }
+		        });
                 }
 		   }); 
 	})

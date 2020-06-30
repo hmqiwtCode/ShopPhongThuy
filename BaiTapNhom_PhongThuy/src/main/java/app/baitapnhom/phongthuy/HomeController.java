@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import app.baitapnhom.entities.KhachHang;
+import app.baitapnhom.entities.TaiKhoan;
 
 /**
  * Handles requests for the application home page.
@@ -24,7 +25,7 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		
 		Date date = new Date();
@@ -50,12 +51,7 @@ public class HomeController {
 		return "login";
 	}
 	
-	@PostMapping("/taikhoandangky")
-	public String dangkytaikhoan(@ModelAttribute("khachhang") KhachHang kh) {
-		System.out.println(kh.getMakh());
-		System.out.println(kh.getGioitinh());
-		return "redirect:/test";
-	}
+	
 	
 	
 	
