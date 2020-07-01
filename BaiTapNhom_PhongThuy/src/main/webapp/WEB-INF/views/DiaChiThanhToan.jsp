@@ -85,9 +85,15 @@
 												${nguoi.sdt}
 											</p>
 
-											<button type="submit" class="btn btn-primary">Giao
+											<button type="button" class="btn btn-primary btn-giao">Giao
 												đến địa chỉ này</button>
 											<button type="submit" class="btn edit-address">Sửa</button>
+											<span class="default"><svg stroke="currentColor"
+													fill="currentColor" stroke-width="0" viewBox="0 0 512 512"
+													height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+																	<path
+														d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg><span> Địa
+													chỉ mặc định</span></span>
 										</div>
 									</div>
 								</div>
@@ -123,7 +129,7 @@
 													</p>
 													<c:choose>
 														<c:when test="${loop.index == 0}">
-															<button type="submit" class="btn btn-primary">Giao
+															<button type="submit" class="btn btn-primary btn-giao">Giao
 																đến địa chỉ này</button>
 															<button type="submit" class="btn edit-address">Sửa</button>
 															<span class="default"><svg stroke="currentColor"
@@ -135,7 +141,7 @@
 																	chỉ mặc định</span></span>
 														</c:when>
 														<c:otherwise>
-															<button type="submit" class="btn btn-primary">Giao
+															<button type="submit" class="btn btn-primary btn-giao">Giao
 																đến địa chỉ này</button>
 															<button type="submit" class="btn btn-danger">Xóa</button>
 															<button type="submit" class="btn edit-address">Sửa</button>
@@ -159,8 +165,8 @@
 								<div class="">
 									<div class="signup-form-container">
 										<!-- form start -->
-										<form:form modelAttribute="diachi" method="post" role="form"
-											id="register-form" autocomplete="off" action="taikhoandangky">
+										<form method="post" role="form" id="register-form"
+											autocomplete="off" action="themDiaChi">
 
 											<div class="form-header">
 												<h5 class="form-title">
@@ -224,10 +230,22 @@
 
 												<div class="form-group">
 													<div class="input-group">
-														<label class="tonghop" for="thanhpho">Địa chỉ:</label>
+														<label class="tonghop" for="thanhpho">Địa chỉ nhà:</label>
 														<div class="cach form-group">
-															<textarea style="margin-left:30px;" class="form-control"
-																id="" rows="3"></textarea>
+															<textarea style="margin-left: 10px;" class="form-control"
+																id="nha" rows="3"></textarea>
+														</div>
+
+													</div>
+													<span class="help-block" id="error"></span>
+												</div>
+
+												<div class="form-group">
+													<div class="input-group">
+														<label class="tonghop" for="thanhpho">Số đường:</label>
+														<div class="cach form-group">
+															<textarea style="margin-left: 10px;" class="form-control"
+																id="duong" rows="3"></textarea>
 														</div>
 
 													</div>
@@ -236,11 +254,11 @@
 
 											</div>
 											<div class="form-footer">
-												<button type="submit" class="btn btn-primary">
+												<button type=button id="themdc" class="btn btn-primary">
 													<i class="fa fa-sign-in fa-2" aria-hidden="true"></i> Thêm
 												</button>
 											</div>
-										</form:form>
+										</form>
 									</div>
 								</div>
 

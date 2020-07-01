@@ -8,7 +8,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +58,6 @@ public class TrangChuController {
 	@Autowired
 	private ThaoTacSanPhamService<NhanVien> thaoTacNhanVien;
 
-	@Autowired
-	private ThaoTacSanPhamService<DiaChi> thaoTacDiaChi;
 
 	@Autowired
 	private SanPhamService spService;
@@ -155,6 +156,14 @@ public class TrangChuController {
 	@GetMapping("/checkout/shipping")
 	public String thanhToan(Model model, Principal principal)
 			throws MalformedURLException, IOException, InterruptedException {
+		kiemTraTaiKhoan(model,principal);
+		model.addAttribute("listTP", getTinhThanh());
+		model.addAttribute("diachi", new DiaChi());
+		return "DiaChiThanhToan";
+	}
+	
+	
+	private void kiemTraTaiKhoan(Model model, Principal principal) {
 		@SuppressWarnings("unchecked")
 		List<SimpleGrantedAuthority> authorities = (List<SimpleGrantedAuthority>) SecurityContextHolder.getContext()
 				.getAuthentication().getAuthorities();
@@ -185,9 +194,6 @@ public class TrangChuController {
 			}
 
 		}
-		model.addAttribute("listTP", getTinhThanh());
-		model.addAttribute("diachi", new DiaChi());
-		return "DiaChiThanhToan";
 	}
 
 	private static List<Tinh> getTinhThanh() throws MalformedURLException, IOException, InterruptedException {
@@ -290,6 +296,32 @@ public class TrangChuController {
 		}
 
 		return rl.toString();
+	}
+	
+	
+	@PostMapping(value = "/checkout/themDiaChi", headers = { "Content-type=application/json" })
+	@ResponseBody
+	public String themDiaChi(@RequestBody DiaChi diaChi,Principal principal) {
+		KhachHang kh = null;
+		List<KhachHang> listKH = thaoTacKhachHang.getTatCa(KhachHang.class);
+		for (int i = 0; i < listKH.size(); i++) {
+			if(listKH.get(i).getMa().equals(principal.getName()))
+				kh = listKH.get(i);
+		}
+		kh.setListdiachi(Arrays.asList(diaChi));
+		thaoTacKhachHang.Sua(kh);
+		return "Thành Công";
+	}
+	
+	@RequestMapping("/checkout/payment")
+	public String payment(Model model,@ModelAttribute("listItemCart") List<ItemCart> listItemCart,Principal principal) {
+		kiemTraTaiKhoan(model,principal);
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
+	    Date date = new Date();  
+        date.setDate(date.getDate() + 7);
+        model.addAttribute("date", formatter.format(date).toString());
+        model.addAttribute("listItemInCart", listItemCart);
+		return "payment";
 	}
 
 }

@@ -124,6 +124,10 @@ public class AdminController_SanPham {
 	}
 	
 	private String randomNameFile(HttpServletRequest request) {
+		String url = request.getRealPath("resources/imguploads/");
+		File file = new File(url);
+		if(!file.exists())
+			file.mkdir();
         List<String> getName = new ArrayList<String>();
         
         File folder = new File(request.getRealPath("resources/imguploads/"));
