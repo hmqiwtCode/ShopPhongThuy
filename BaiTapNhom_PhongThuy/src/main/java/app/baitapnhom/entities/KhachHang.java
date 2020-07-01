@@ -2,6 +2,7 @@ package app.baitapnhom.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -25,16 +27,17 @@ public class KhachHang implements Serializable {
 	private String ma;
 	@Nationalized
 	private String ho;
-	
+
 	@Nationalized
 	private String ten;
-	
+
 	private String sdt;
 	private String email;
 	@Nationalized
 	private String gioitinh;
 	private LocalDate ngaysinh;
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	@CollectionTable()
 	private List<DiaChi> listdiachi;
 
@@ -49,7 +52,8 @@ public class KhachHang implements Serializable {
 		super();
 	}
 
-	public KhachHang(String makh,String hokh, String tenkh, String sdt, String email, String gioitinh, LocalDate ngaysinh) {
+	public KhachHang(String makh, String hokh, String tenkh, String sdt, String email, String gioitinh,
+			LocalDate ngaysinh) {
 		super();
 		this.ma = makh;
 		this.ho = hokh;
@@ -60,7 +64,7 @@ public class KhachHang implements Serializable {
 		this.ngaysinh = ngaysinh;
 	}
 
-	public KhachHang(String tenkh,String hokh,String sdt, String email, String gioitinh, LocalDate ngaysinh) {
+	public KhachHang(String tenkh, String hokh, String sdt, String email, String gioitinh, LocalDate ngaysinh) {
 		super();
 		this.ten = tenkh;
 		this.ho = hokh;
@@ -69,8 +73,6 @@ public class KhachHang implements Serializable {
 		this.gioitinh = gioitinh;
 		this.ngaysinh = ngaysinh;
 	}
-
-	
 
 	public String getMa() {
 		return ma;
@@ -152,6 +154,7 @@ public class KhachHang implements Serializable {
 		this.listhoadon = listhoadon;
 	}
 
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -176,9 +179,5 @@ public class KhachHang implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-
-	
 
 }

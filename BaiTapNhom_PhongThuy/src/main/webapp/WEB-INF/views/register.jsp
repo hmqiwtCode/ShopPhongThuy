@@ -105,8 +105,7 @@ section {
 							<form:input cssClass="form-control" path="ma"
 								placeholder="Tên tài khoản" />
 						</div>
-						<span class="help-block" id="error"></span>
-						<span  id="dup"></span>
+						<span class="help-block" id="error"></span> <span id="dup"></span>
 					</div>
 					<div class="row">
 
@@ -117,8 +116,7 @@ section {
 										<i class="fa fa-id-badge" aria-hidden="true"></i>
 									</div>
 								</div>
-								<form:input path="ho" cssClass="form-control"
-									placeholder="Họ" />
+								<form:input path="ho" cssClass="form-control" placeholder="Họ" />
 							</div>
 							<span class="help-block" id="error"></span>
 						</div>
@@ -145,7 +143,7 @@ section {
 									<span class="glyphicon glyphicon-envelope">@</span>
 								</div>
 							</div>
-							<form:input path="email"  cssClass="form-control"
+							<form:input path="email" cssClass="form-control"
 								placeholder="Email" />
 						</div>
 						<span class="help-block" id="error"></span>
@@ -235,14 +233,13 @@ section {
 							</div>
 						</div>
 
-
 					</div>
-
-					<div class="form-footer">
-						<button type="submit" class="btn btn-info">
-							<i class="fa fa-sign-in fa-2" aria-hidden="true"></i> Đăng ký
-						</button>
-					</div>
+				</div>
+				<div class="form-footer">
+					<button type="submit" class="btn btn-info">
+						<i class="fa fa-sign-in fa-2" aria-hidden="true"></i> Đăng ký
+					</button>
+				</div>
 			</form:form>
 		</div>
 	</section>
@@ -307,7 +304,7 @@ section {
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous"></script>
-		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="resources/js/jquery.validate.min.js"></script>
 	<script src="resources/js/register.js"></script>
 </body>

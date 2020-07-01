@@ -1,5 +1,12 @@
 package app.baitapnhom.phongthuy;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +24,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+
+import app.baitapnhom.ediachi.Huyen;
+import app.baitapnhom.ediachi.Tinh;
+import app.baitapnhom.ediachi.Xa;
 import app.baitapnhom.entities.DiaChi;
 import app.baitapnhom.entities.ItemCart;
 import app.baitapnhom.entities.KhachHang;
@@ -30,15 +46,17 @@ import app.baitapnhom.service.ThaoTacSanPhamService;
 @SessionAttributes({ "listItemCart" })
 public class TrangChuController {
 
-
 	@Autowired
 	private ThaoTacSanPhamService<NhaCungCap> thaoTacNhaCC;
-	
+
 	@Autowired
 	private ThaoTacSanPhamService<KhachHang> thaoTacKhachHang;
-	
+
 	@Autowired
 	private ThaoTacSanPhamService<NhanVien> thaoTacNhanVien;
+
+	@Autowired
+	private ThaoTacSanPhamService<DiaChi> thaoTacDiaChi;
 
 	@Autowired
 	private SanPhamService spService;
@@ -125,7 +143,7 @@ public class TrangChuController {
 		}
 		if (soLuong == 0) {
 			for (int i = 0; i < listItemCart.size(); i++) {
-				if(listItemCart.get(i).getMaSanPham() == id)
+				if (listItemCart.get(i).getMaSanPham() == id)
 					listItemCart.remove(i);
 			}
 			return String.valueOf(tongTien);
@@ -133,41 +151,145 @@ public class TrangChuController {
 
 		return String.valueOf(tongTien);
 	}
-	
-	
+
 	@GetMapping("/checkout/shipping")
-	public String thanhToan(Model model,Principal principal) {
+	public String thanhToan(Model model, Principal principal)
+			throws MalformedURLException, IOException, InterruptedException {
 		@SuppressWarnings("unchecked")
-		List<SimpleGrantedAuthority> authorities = (List<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		List<SimpleGrantedAuthority> authorities = (List<SimpleGrantedAuthority>) SecurityContextHolder.getContext()
+				.getAuthentication().getAuthorities();
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < authorities.size(); i++) {
 			sb.append(authorities.get(i).toString());
 		}
-		
-		if(sb.toString().contains("ROLE_QUANLY")) {
+
+		if (sb.toString().contains("ROLE_QUANLY")) {
 			List<NhanVien> listNhanVien = thaoTacNhanVien.getTatCa(NhanVien.class);
 			for (int i = 0; i < listNhanVien.size(); i++) {
-				if(listNhanVien.get(i).getMa().equals(principal.getName())) {
+				if (listNhanVien.get(i).getMa().equals(principal.getName())) {
 					NhanVien nv = null;
 					nv = listNhanVien.get(i);
 					model.addAttribute("nguoi", nv);
-					
+
 				}
 			}
-		}else {
+		} else {
 			List<KhachHang> listKhachHangs = thaoTacKhachHang.getTatCa(KhachHang.class);
 			for (int i = 0; i < listKhachHangs.size(); i++) {
-				if(listKhachHangs.get(i).getMa().equals(principal.getName())) {
+				if (listKhachHangs.get(i).getMa().equals(principal.getName())) {
 					KhachHang kh = null;
 					kh = listKhachHangs.get(i);
 					model.addAttribute("nguoi", kh);
-					
+
 				}
 			}
-			
+
 		}
+		model.addAttribute("listTP", getTinhThanh());
 		model.addAttribute("diachi", new DiaChi());
 		return "DiaChiThanhToan";
+	}
+
+	private static List<Tinh> getTinhThanh() throws MalformedURLException, IOException, InterruptedException {
+		List<Tinh> contactList = new ArrayList<Tinh>();
+		URL url = new URL("https://thongtindoanhnghiep.co/api/city");
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		int responseCode = con.getResponseCode();
+		System.out.println("GET Response Code : " + responseCode);
+		if (responseCode == HttpURLConnection.HTTP_OK) { // success
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			JsonParser jsonParser = new JsonParser();
+			JsonObject jo = (JsonObject) jsonParser.parse(response.toString());
+			JsonArray jsonArr = jo.getAsJsonArray("LtsItem");
+			Gson googleJson = new Gson();
+
+			Type type = new TypeToken<List<Tinh>>() {
+			}.getType();
+			contactList = googleJson.fromJson(jsonArr, type);
+			in.close();
+		}
+		return contactList;
+
+	}
+
+	@PostMapping(value = "/checkout/getHuyen", headers = { "Content-type=application/json" })
+	@ResponseBody
+	public String getHuyen(@RequestBody Huyen huyen) throws MalformedURLException, IOException, InterruptedException {
+
+		return getHuyenMa(huyen.getID());
+	}
+
+	private static String getHuyenMa(int id) throws MalformedURLException, IOException, InterruptedException {
+		StringBuilder bl = new StringBuilder();
+		URL url = new URL("https://thongtindoanhnghiep.co/api/city/" + id + "/district");
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		int responseCode = con.getResponseCode();
+		System.out.println("GET Response Code : " + responseCode);
+		if (responseCode == HttpURLConnection.HTTP_OK) { // success
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			Gson googleJson = new Gson();
+
+			Type type = new TypeToken<List<Huyen>>() {
+			}.getType();
+			List<Huyen> contactList = googleJson.fromJson(response.toString(), type);
+			for (int i = 0; i < contactList.size(); i++) {
+				bl.append(contactList.get(i).getID() + ":" + contactList.get(i).getTitle());
+				if (i < contactList.size() - 1)
+					bl.append(",");
+			}
+
+			in.close();
+		}
+		return bl.toString();
+
+	}
+
+	@PostMapping(value = "/checkout/getXa", headers = { "Content-type=application/json" })
+	@ResponseBody
+	public String getXa(@RequestBody Xa xa) throws MalformedURLException, IOException, InterruptedException {
+		StringBuffer response = new StringBuffer();
+		StringBuffer rl = new StringBuffer();
+		URL url = new URL("https://thongtindoanhnghiep.co/api/district/"+xa.getQuanhuyenid()+"/ward");
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		int responseCode = con.getResponseCode();
+		System.out.println("GET Response Code : " + responseCode);
+		if (responseCode == HttpURLConnection.HTTP_OK) { 
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+			String inputLine;
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			Gson googleJson = new Gson();
+
+			Type type = new TypeToken<List<Xa>>() {
+			}.getType();
+			List<Xa> contactList = googleJson.fromJson(response.toString(), type);
+			for (int i = 0; i < contactList.size(); i++) {
+				rl.append(contactList.get(i).getTitle());
+				if (i < contactList.size() - 1)
+					rl.append(",");
+			}
+
+			in.close();
+		}
+
+		return rl.toString();
 	}
 
 }
