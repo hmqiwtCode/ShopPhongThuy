@@ -2,6 +2,7 @@ package app.baitapnhom.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -20,7 +21,7 @@ public class ChiTietHoaDon implements Serializable{
 	private HoaDon hoadon;
 	
 	@Id
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "masp")
 	private SanPham sanpham;
 	
@@ -35,6 +36,24 @@ public class ChiTietHoaDon implements Serializable{
 		this.soluong = soluong;
 		this.dongia = dongia;
 	}
+
+	
+
+	public ChiTietHoaDon(SanPham sanpham, int soluong, double dongia) {
+		super();
+		this.sanpham = sanpham;
+		this.soluong = soluong;
+		this.dongia = dongia;
+	}
+
+
+
+	public ChiTietHoaDon(int soluong, double dongia) {
+		super();
+		this.soluong = soluong;
+		this.dongia = dongia;
+	}
+
 
 
 	public ChiTietHoaDon() {

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -11,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Nationalized;
 
 @SuppressWarnings("serial")
 @Entity
@@ -28,9 +32,12 @@ public class HoaDon implements Serializable {
 	private KhachHang kh;
 	
 	private LocalDate ngaylap;
+	
+	@Nationalized
+	@Column(columnDefinition = "NVARCHAR(MAX)")
 	private String chuy;
 	
-	@OneToMany(mappedBy = "hoadon", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "hoadon", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private List<ChiTietHoaDon> listcthd;
 	public HoaDon() {
 		super();
@@ -43,6 +50,28 @@ public class HoaDon implements Serializable {
 	public HoaDon(NhanVien nv, KhachHang kh, LocalDate ngaylap, String chuy) {
 		super();
 		this.nv = nv;
+		this.kh = kh;
+		this.ngaylap = ngaylap;
+		this.chuy = chuy;
+	}
+	
+	
+	public HoaDon(String mahd, LocalDate ngaylap, String chuy) {
+		super();
+		this.mahd = mahd;
+		this.ngaylap = ngaylap;
+		this.chuy = chuy;
+	}
+	public HoaDon(String mahd, NhanVien nv, LocalDate ngaylap, String chuy) {
+		super();
+		this.mahd = mahd;
+		this.nv = nv;
+		this.ngaylap = ngaylap;
+		this.chuy = chuy;
+	}
+	public HoaDon(String mahd, KhachHang kh, LocalDate ngaylap, String chuy) {
+		super();
+		this.mahd = mahd;
 		this.kh = kh;
 		this.ngaylap = ngaylap;
 		this.chuy = chuy;

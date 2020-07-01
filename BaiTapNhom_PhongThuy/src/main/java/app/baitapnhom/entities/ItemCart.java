@@ -78,6 +78,16 @@ public class ItemCart {
 	public void setTongTien(double tongTien) {
 		this.tongTien = tongTien;
 	}
+	private int slmax;
+	
+
+	public int getSlmax() {
+		return slmax;
+	}
+
+	public void setSlmax(int slmax) {
+		this.slmax = slmax;
+	}
 
 	@Override
 	public int hashCode() {

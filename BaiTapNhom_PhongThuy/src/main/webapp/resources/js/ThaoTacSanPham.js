@@ -2,6 +2,18 @@ $(document).ready(function() {
 	$(document).on('change',function(event) {
 	    var id = $(event.target).attr('id');
 	    var sl = $(event.target).val();
+	    var max = $(event.target).attr('max');
+	    if(parseInt(sl) > parseInt(max) || parseInt(sl) < 0){
+	    	console.log(max);
+	    	$(event.target).val(max);
+	    	sl = max;
+	    	swal({
+				icon: "error",
+			    title: "Tối đa " + max + " sản phẩm",
+			    text: "",
+			    type: "error"
+			})
+	    }
 	    var ItemCart = {};
 		ItemCart.maSanPham = id;
 		ItemCart.soLuong = sl;

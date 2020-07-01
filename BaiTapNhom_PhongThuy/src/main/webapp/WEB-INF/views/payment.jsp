@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,43 +26,12 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row shadow-lg p-3 mb-2 bg-white rounded">
+		<div class="row p-3 mb-2 bg-white rounded">
 			<div class="col-md-12">
 				<h5 class="text-center">HÌNH THỨC THANH TOÁN</h5>
 			</div>
 		</div>
-		<div class="row shadow-lg p-3 mb-5 bg-white rounded" style="">
-			<%-- <div class="col-md-6">
-				<h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
-				<div class="form-group">
-					<label for="ho"><h6>HỌ</h6> </label> <input type="text" id="ho"
-						placeholder="" class="form-control" value="${nguoi.ho}"
-						disabled="disabled">
-				</div>
-
-				<div class="form-group">
-					<label for="ten"><h6>TÊN</h6></label> <input type="text" id="ten"
-						placeholder="" class="form-control" value="${nguoi.ten}"
-						disabled="disabled">
-				</div>
-
-				<div class="form-group">
-					<label for=email><h6>EMAIL</h6></label> <input type="text"
-						disabled="disabled" id="email" placeholder="" class="form-control"
-						value="${nguoi.email}">
-				</div>
-
-				<div class="form-group">
-					<label for="sdt"><h6>SỐ ĐIỆN THOẠI</h6></label> <input type="text"
-						disabled="disabled" id="sdt" placeholder="" class="form-control"
-						value="${nguoi.sdt}">
-				</div>
-				<button id="getL" type="button"
-					class="btn btn-success col-md-12 hide">GET LIST FRIENDS</button>
-
-			</div> --%>
-
-
+		<div class="row  p-3 mb-5 bg-white rounded" style="">
 			<div class="col-md-6">
 				<div class="card">
 					<div class="card-header">
@@ -103,28 +72,47 @@
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item">
 							<div class="card">
-								<div class="card-header">Địa chỉ</div>
+								<div class="card-header font-weight-bold">Địa chỉ giao hàng</div>
 								<ul class="list-group list-group-flush">
-									<li class="list-group-item">${nguoi.ho} ${nguoi.ten}</li>
-									<li class="list-group-item">Dapibus ac facilisis in</li>
-									<li class="list-group-item">Vestibulum at eros</li>
+									<li class="list-group-item">Tên: ${nguoi.ho} ${nguoi.ten}</li>
+									<li class="list-group-item">Địa chỉ: ${diachi.sonha}, ${diachi.duong}, ${diachi.phuong}, ${diachi.quan},
+														${diachi.thanhpho}</li>
+									<li class="list-group-item">Số điện thoại: ${nguoi.sdt}</li>
 								</ul>
 							</div>
-
+							
+							<p></p>
+							<div class="card">
+								<div class="card-header font-weight-bold">Đơn hàng (${listItemInCart.size()} sản phẩm)</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">
+										<c:forEach var="sp" items="${listItemInCart}">
+											<p><strong>${sp.soLuong}</strong> * ${sp.tenSanPham} = <fmt:formatNumber type="number" pattern="###,###" value="${sp.soLuong * sp.giaTien}" /> ₫</p>
+											<hr/>
+										</c:forEach>
+										<p>Tiền phụ phí (5000đ/sản phẩm):  <fmt:formatNumber type="number" pattern="###,###" value="${listItemInCart.size() * 5000}" /> ₫</p>
+										<hr/>
+										<p><strong>Tổng tiền: </strong> <strong class="text-danger"><fmt:formatNumber type="number" pattern="###,###" value="${tongTien + listItemInCart.size() * 5000}" /></strong> </p>
+									</li>
+									
+									
+								</ul>
+							</div>
 						</li>
 
 					</ul>
+					
+					
 				</div>
 
 			</div>
-
-
-
-
-
-
-
+			
+			<div class="col-md-12 text-center">
+			<br/>
+				<button type="submit" class="btn btn-danger col-md-12 " id="muahang"><strong>ĐẶT MUA</strong></button>
+			</div>
 		</div>
+		
 	</div>
 
 
@@ -142,6 +130,8 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/js/muasanpham.js"></script>
 
 </body>
 </html>

@@ -2,8 +2,12 @@ package app.baitapnhom.phongthuy;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +53,21 @@ public class HomeController {
 	public String test(Model model) {
 		
 		return "login";
+	}
+	
+	@Autowired
+	private SessionRegistry sessionRegistry;
+	@GetMapping("/testabcd")
+	public String adminss() {
+		final List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
+
+        for(final Object principal : allPrincipals) {
+            if(principal instanceof User) {
+                // Do something with user
+                System.out.println(((User) principal).getUsername());
+            }
+        }
+		return "";
 	}
 	
 	

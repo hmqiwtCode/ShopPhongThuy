@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -36,7 +38,9 @@ import com.google.gson.reflect.TypeToken;
 import app.baitapnhom.ediachi.Huyen;
 import app.baitapnhom.ediachi.Tinh;
 import app.baitapnhom.ediachi.Xa;
+import app.baitapnhom.entities.ChiTietHoaDon;
 import app.baitapnhom.entities.DiaChi;
+import app.baitapnhom.entities.HoaDon;
 import app.baitapnhom.entities.ItemCart;
 import app.baitapnhom.entities.KhachHang;
 import app.baitapnhom.entities.NhaCungCap;
@@ -58,6 +62,20 @@ public class TrangChuController {
 	@Autowired
 	private ThaoTacSanPhamService<NhanVien> thaoTacNhanVien;
 
+	@Autowired
+	private ThaoTacSanPhamService<DiaChi> thaotacDiaChi;
+
+	@Autowired
+	private ThaoTacSanPhamService<HoaDon> thaoTacHoaDon;
+
+	@Autowired
+	private ThaoTacSanPhamService<ChiTietHoaDon> thaoTacCTHD;
+	
+	@Autowired
+	private ThaoTacSanPhamService<SanPham> thaoTacSanPham;
+	
+	@Autowired
+	private SanPhamService sPService;
 
 	@Autowired
 	private SanPhamService spService;
@@ -74,8 +92,10 @@ public class TrangChuController {
 		List<NhaCungCap> listChuyen = new ArrayList<NhaCungCap>();
 		for (int i = 0; i < listNCC.size(); i++) {
 			System.out.println(listNCC.get(i));
-			if (!listChuyen.contains(listNCC.get(i)))
+			if (!listChuyen.contains(listNCC.get(i))) {
 				listChuyen.add(listNCC.get(i));
+			}
+				
 		}
 		model.addAttribute("listSPController", listChuyen);
 		model.addAttribute("sl", String.valueOf(listItemCart.size()));
@@ -93,6 +113,7 @@ public class TrangChuController {
 		itemCart.setGiaTien(sp.getGiaban());
 		itemCart.setTongTien(itemCart.getGiaTien() * itemCart.getSoLuong());
 		itemCart.setUrlHinh(sp.getUrlhinh());
+		itemCart.setSlmax(sp.getSoluongton());
 		if (!(listItemCart.contains(itemCart))) {
 			itemCart.setSoLuong(itemCart.getSoLuong() + 1);
 			listItemCart.add(itemCart);
@@ -156,13 +177,12 @@ public class TrangChuController {
 	@GetMapping("/checkout/shipping")
 	public String thanhToan(Model model, Principal principal)
 			throws MalformedURLException, IOException, InterruptedException {
-		kiemTraTaiKhoan(model,principal);
+		kiemTraTaiKhoan(model, principal);
 		model.addAttribute("listTP", getTinhThanh());
 		model.addAttribute("diachi", new DiaChi());
 		return "DiaChiThanhToan";
 	}
-	
-	
+
 	private void kiemTraTaiKhoan(Model model, Principal principal) {
 		@SuppressWarnings("unchecked")
 		List<SimpleGrantedAuthority> authorities = (List<SimpleGrantedAuthority>) SecurityContextHolder.getContext()
@@ -269,12 +289,12 @@ public class TrangChuController {
 	public String getXa(@RequestBody Xa xa) throws MalformedURLException, IOException, InterruptedException {
 		StringBuffer response = new StringBuffer();
 		StringBuffer rl = new StringBuffer();
-		URL url = new URL("https://thongtindoanhnghiep.co/api/district/"+xa.getQuanhuyenid()+"/ward");
+		URL url = new URL("https://thongtindoanhnghiep.co/api/district/" + xa.getQuanhuyenid() + "/ward");
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		int responseCode = con.getResponseCode();
 		System.out.println("GET Response Code : " + responseCode);
-		if (responseCode == HttpURLConnection.HTTP_OK) { 
+		if (responseCode == HttpURLConnection.HTTP_OK) {
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
 			String inputLine;
 
@@ -297,31 +317,132 @@ public class TrangChuController {
 
 		return rl.toString();
 	}
-	
-	
+
 	@PostMapping(value = "/checkout/themDiaChi", headers = { "Content-type=application/json" })
 	@ResponseBody
-	public String themDiaChi(@RequestBody DiaChi diaChi,Principal principal) {
+	public String themDiaChi(@RequestBody DiaChi diaChi, Principal principal) {
 		KhachHang kh = null;
 		List<KhachHang> listKH = thaoTacKhachHang.getTatCa(KhachHang.class);
 		for (int i = 0; i < listKH.size(); i++) {
-			if(listKH.get(i).getMa().equals(principal.getName()))
+			if (listKH.get(i).getMa().equals(principal.getName()))
 				kh = listKH.get(i);
 		}
 		kh.setListdiachi(Arrays.asList(diaChi));
 		thaoTacKhachHang.Sua(kh);
 		return "Thành Công";
 	}
-	
+
+	private static List<String> listThongTin = new ArrayList<String>();
+
 	@RequestMapping("/checkout/payment")
-	public String payment(Model model,@ModelAttribute("listItemCart") List<ItemCart> listItemCart,Principal principal) {
-		kiemTraTaiKhoan(model,principal);
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
-	    Date date = new Date();  
-        date.setDate(date.getDate() + 7);
-        model.addAttribute("date", formatter.format(date).toString());
-        model.addAttribute("listItemInCart", listItemCart);
+	public String payment(@RequestParam(value = "name", required = false) String id, Model model,
+			@ModelAttribute("listItemCart") List<ItemCart> listItemCart, Principal principal) {
+		kiemTraTaiKhoan(model, principal);
+		int iDDiaChi = 0;
+		DiaChi dc = null;
+		if (id == null)
+			iDDiaChi = 1;
+		else
+			iDDiaChi = Integer.valueOf(id);
+		List<DiaChi> listDC = thaotacDiaChi.getTatCa(DiaChi.class);
+		for (int i = 0; i < listDC.size(); i++) {
+			if (listDC.get(i).getMadiachi() == iDDiaChi)
+				dc = listDC.get(i);
+		}
+		double tongTien = 0.0;
+		for (int i = 0; i < listItemCart.size(); i++) {
+			double sp = listItemCart.get(i).getGiaTien();
+			int soLuong = listItemCart.get(i).getSoLuong();
+			tongTien += sp * soLuong;
+		}
+
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Date date = new Date();
+		date.setDate(date.getDate() + 7);
+		listThongTin.add("Địa chỉ" + dc.getSonha() + "," + dc.getDuong() + "," + dc.getPhuong() + "," + dc.getQuan()
+				+ "," + dc.getThanhpho());
+		listThongTin.add(date.toString());
+		listThongTin.add(String.valueOf(tongTien));
+		model.addAttribute("date", formatter.format(date).toString());
+		model.addAttribute("listItemInCart", listItemCart);
+		model.addAttribute("diachi", dc);
+		model.addAttribute("tongTien", tongTien);
 		return "payment";
+	}
+
+	@PostMapping("/checkout/mua")
+	@ResponseBody
+	public String themHoaDon(Principal principal,@ModelAttribute("listItemCart") List<ItemCart> listItemCart) {
+		String ma = "maHD";
+		String chuy = "";
+		NhanVien nv = null;
+		HoaDon hd = null;
+		KhachHang kh = null;
+		List<HoaDon> listHoaDon = thaoTacHoaDon.getTatCa(HoaDon.class);
+		if (listHoaDon.size() == 0)
+			ma = ma + String.valueOf(0);
+		else
+			ma = ma + String.valueOf(listHoaDon.size());
+		System.out.println(ma);
+		@SuppressWarnings("unchecked")
+		List<SimpleGrantedAuthority> authorities = (List<SimpleGrantedAuthority>) SecurityContextHolder.getContext()
+				.getAuthentication().getAuthorities();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < authorities.size(); i++) {
+			sb.append(authorities.get(i).toString());
+		}
+
+		if (sb.toString().contains("ROLE_QUANLY")) {
+			List<NhanVien> listNhanVien = thaoTacNhanVien.getTatCa(NhanVien.class);
+			for (int i = 0; i < listNhanVien.size(); i++) {
+				if (listNhanVien.get(i).getMa().equals(principal.getName())) {
+					nv = listNhanVien.get(i);
+					hd = new HoaDon(ma, LocalDate.now(), chuy);
+					hd.setNv(nv);
+
+				}
+				
+			}
+			thaoTacHoaDon.Them(hd);
+			for (int i = 0; i < listItemCart.size(); i++) {
+				SanPham sp = null;
+				sp = sPService.getSanPhamByID((listItemCart.get(i).getMaSanPham()));
+				int sl = listItemCart.get(i).getSoLuong();
+				double dongia = listItemCart.get(i).getGiaTien();
+				ChiTietHoaDon cth = new ChiTietHoaDon(sp, sl, dongia);
+				sp.setSoluongton(sp.getSoluongton() - listItemCart.get(i).getSoLuong());
+				thaoTacSanPham.Sua(sp);
+				cth.setSanpham(sp);
+				cth.setHoadon(hd);
+				thaoTacCTHD.Sua(cth);
+			}
+		}
+		else {
+			List<KhachHang> listKhachHangs = thaoTacKhachHang.getTatCa(KhachHang.class);
+			for (int i = 0; i < listKhachHangs.size(); i++) {
+				if (listKhachHangs.get(i).getMa().equals(principal.getName())) {
+					kh = listKhachHangs.get(i);
+					hd = new HoaDon(ma,LocalDate.now(), chuy);
+					hd.setKh(kh);
+				}
+			}
+			thaoTacHoaDon.Them(hd);
+			for (int i = 0; i < listItemCart.size(); i++) {
+				SanPham sp = null;
+				sp = sPService.getSanPhamByID((listItemCart.get(i).getMaSanPham()));
+				int sl = listItemCart.get(i).getSoLuong();
+				double dongia = listItemCart.get(i).getGiaTien();
+				ChiTietHoaDon cth = new ChiTietHoaDon(sl, dongia);
+				sp.setSoluongton(sp.getSoluongton() - listItemCart.get(i).getSoLuong());
+				thaoTacSanPham.Sua(sp);
+				cth.setSanpham(sp);
+				cth.setHoadon(hd);
+				thaoTacCTHD.Sua(cth);
+			}
+		}
+		
+		
+		return "";
 	}
 
 }

@@ -54,7 +54,7 @@
 								<td><fmt:formatNumber type="number" pattern="###,###"
 										value="${sanpham.giaTien}" /> VND</td>
 								<form class="frmSanPham">
-									<td><input class="form-control" type="number" min="0" 
+									<td><input class="form-control" type="number" min="0" max="${sanpham.slmax}"
 										value="${sanpham.soLuong}" id="${sanpham.maSanPham}"></td>
 
 									<td>
@@ -81,8 +81,10 @@
 							style="margin-left: 50px">Contine Shopping</button>
 					</form>		
 					<form method="GET" action="${pageContext.request.contextPath}/checkout/shipping">
+					<c:if test="${listTemp.size() >0}">
 						<button type="submit" class="btn btn-primary"
 							style="margin-left: 50px">Thanh toán</button>
+					</c:if>
 					</form>
 				</div>
 			</div>
@@ -105,6 +107,7 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js
         "></script>
+       <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script type="text/javascript">
 		
 	</script>

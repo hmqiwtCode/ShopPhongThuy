@@ -26,7 +26,7 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row shadow-lg p-3 mb-5 bg-white rounded" style="">
+		<div class="row p-3 mb-5 bg-white rounded" style="">
 			<%-- <div class="col-md-6">
 				<h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
 				<div class="form-group">
@@ -85,7 +85,7 @@
 												${nguoi.sdt}
 											</p>
 
-											<button type="button" class="btn btn-primary btn-giao">Giao
+											<button type="button" class="btn btn-primary btn-giao" value="${nguoi.diachi.madiachi}">Giao
 												đến địa chỉ này</button>
 											<button type="submit" class="btn edit-address">Sửa</button>
 											<span class="default"><svg stroke="currentColor"
@@ -129,7 +129,7 @@
 													</p>
 													<c:choose>
 														<c:when test="${loop.index == 0}">
-															<button type="submit" class="btn btn-primary btn-giao">Giao
+															<button type="submit" class="btn btn-primary btn-giao" value="${dc.madiachi}">Giao
 																đến địa chỉ này</button>
 															<button type="submit" class="btn edit-address">Sửa</button>
 															<span class="default"><svg stroke="currentColor"
@@ -141,7 +141,7 @@
 																	chỉ mặc định</span></span>
 														</c:when>
 														<c:otherwise>
-															<button type="submit" class="btn btn-primary btn-giao">Giao
+															<button type="submit" class="btn btn-primary btn-giao" value="${dc.madiachi}">Giao
 																đến địa chỉ này</button>
 															<button type="submit" class="btn btn-danger">Xóa</button>
 															<button type="submit" class="btn edit-address">Sửa</button>

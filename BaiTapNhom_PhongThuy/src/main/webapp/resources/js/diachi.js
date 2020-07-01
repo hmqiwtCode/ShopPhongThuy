@@ -102,8 +102,9 @@ $(document).ready(
 			});
 			
 			
-			$(".btn-giao").on('click', function(event) {		
-				$('<form action="payment" method="post"><input type="hidden" name="name" value="value1"></input></form>').appendTo('body').submit().remove();
+			$(".btn-giao").on('click', function(event) {
+				var value =  $(event.target).attr('value');
+				$('<form action="payment" method="post"><input type="hidden" name="name" value='+value+'></input></form>').appendTo('body').submit().remove();
 				
 			});
 		})

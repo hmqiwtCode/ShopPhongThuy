@@ -2,7 +2,7 @@ package app.baitapnhom.entities;
 
 import java.io.Serializable;
 
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -42,6 +42,10 @@ public class SanPham implements Serializable{
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "nhacc")
 	private NhaCungCap nhacc;
+	
+	@Nationalized
+	@Column(columnDefinition = "NVARCHAR(MAX)")
+	private String chitiet;
 
 	public SanPham(String tensp, int soluongton, double gianhap, double giaban, String urlhinh) {
 		super();
@@ -50,6 +54,16 @@ public class SanPham implements Serializable{
 		this.gianhap = gianhap;
 		this.giaban = giaban;
 		this.urlhinh = urlhinh;
+	}
+	
+	public SanPham(String tensp, int soluongton, double gianhap, double giaban, String urlhinh, String chitiet) {
+		super();
+		this.tensp = tensp;
+		this.soluongton = soluongton;
+		this.gianhap = gianhap;
+		this.giaban = giaban;
+		this.urlhinh = urlhinh;
+		this.chitiet = chitiet;
 	}
 
 	public SanPham(int masp, String tensp, int soluongton, double gianhap, double giaban, String urlhinh) {
@@ -76,6 +90,16 @@ public class SanPham implements Serializable{
 
 	public String getTensp() {
 		return tensp;
+	}
+	
+	
+
+	public String getChitiet() {
+		return chitiet;
+	}
+
+	public void setChitiet(String chitiet) {
+		this.chitiet = chitiet;
 	}
 
 	public void setTensp(String tensp) {
