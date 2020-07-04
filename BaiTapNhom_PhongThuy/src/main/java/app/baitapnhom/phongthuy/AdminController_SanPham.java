@@ -363,7 +363,7 @@ public class AdminController_SanPham {
 	@ResponseBody
 	public String xoaNuocSanXuat(HttpServletRequest request,Model model,@ModelAttribute("ncc") NhaCungCap ncc
 			,@ModelAttribute("loaisp") LoaiSanPham loai,@ModelAttribute("nuocsx") NuocSanXuat nsx,@RequestBody NuocSanXuat nc1,@ModelAttribute("sp") SanPham sp) {
-		
+		System.out.println(nc1.getManuoc());
 		if(layThongTinService.deleteNCC(nc1.getManuoc())) {
 			return "OK";
 		}else {
@@ -473,8 +473,10 @@ public class AdminController_SanPham {
         }
         String saltStr = salt.toString();
         return saltStr;
-        
 	}
+	
+	
+	
 	
 	
 	

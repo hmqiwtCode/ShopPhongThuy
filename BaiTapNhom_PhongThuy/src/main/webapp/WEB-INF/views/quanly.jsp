@@ -298,7 +298,7 @@
             <div class="modal fade" id="modelNCC" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
-                    <form action="themnhacungcap" method="post" >
+                    <form action="${pageContext.request.contextPath}/admin/themnhacungcap" method="post" >
                         <div class="modal-header">
                             <h5 class="modal-title">Thêm nhà cung cấp</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -424,7 +424,7 @@
             <div class="modal fade" id="modelLoai" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
-                    <form action="themloaisanpham" method="post">
+                    <form action="${pageContext.request.contextPath}/admin/themloaisanpham" method="post">
                         <div class="modal-header">
                             <h5 class="modal-title">Thêm loại sản phẩm</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -539,7 +539,7 @@
             <div class="modal fade" id="modelNuoc" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
-                    <form action="themnuocsanxuat" method="post">
+                    <form action="${pageContext.request.contextPath}/admin/themnuocsanxuat" method="post">
                         <div class="modal-header">
                             <h5 class="modal-title">Thêm nước sản xuất</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">

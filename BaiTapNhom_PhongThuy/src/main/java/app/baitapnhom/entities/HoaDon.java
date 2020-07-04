@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Nationalized;
 
 @SuppressWarnings("serial")
@@ -38,6 +40,7 @@ public class HoaDon implements Serializable {
 	private String chuy;
 	
 	@OneToMany(mappedBy = "hoadon", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<ChiTietHoaDon> listcthd;
 	public HoaDon() {
 		super();

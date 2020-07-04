@@ -1,5 +1,7 @@
 $(document).ready(function() {
 	$(".dungdexoa").on('click',function(event) {
+		var origin   = window.location.origin + "/phongthuy/admin/quanly";
+		
 		event.preventDefault();
 	    var ma = $(event.target).attr('id');
 	    if(ma == null){
@@ -15,7 +17,7 @@ $(document).ready(function() {
 		    NhaCungCap.mancc = mang[1];
 			$.ajax({
 				contentType:'application/json;charset=UTF-8',
-				url : 'quanly/xoancc',
+				url : origin + '/xoancc',
 				type : 'POST',
 				data : JSON.stringify(NhaCungCap),
 				success : function(data, textStatus, jqXHR) {
@@ -27,7 +29,7 @@ $(document).ready(function() {
 						    text: "",
 						    type: "success"
 						}).then(function(){
-							window.location = "quanly";
+							window.location = origin ;
 						})
 					}
 					
@@ -48,6 +50,7 @@ $(document).ready(function() {
 	});
 })
 $(document).ready(function() {
+	var origin   = window.location.origin + "/phongthuy/admin/quanly";
 	$(".dungdexoa2").on('click',function(event) {
 		event.preventDefault();
 	    var ma = $(event.target).attr('id');
@@ -64,7 +67,7 @@ $(document).ready(function() {
 	    	LoaiSanPham.maloai = mang[1];
 			$.ajax({
 				contentType:'application/json;charset=UTF-8',
-				url : 'quanly/xoaloai',
+				url : origin + '/xoaloai',
 				type : 'POST',
 				data : JSON.stringify(LoaiSanPham),
 				success : function(data, textStatus, jqXHR) {

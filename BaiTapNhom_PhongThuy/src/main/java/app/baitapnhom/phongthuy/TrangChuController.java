@@ -447,6 +447,9 @@ public class TrangChuController {
 				listItemCart.remove(i);
 				
 			}
+			for (int i = 0; i < listItemCart.size(); i++) {
+				listItemCart.remove(i);
+			}
 			emailDAO.sendEmail(nv.getEmail(), "Mua hàng thành công_HQNShop", thongTin.toString());
 		}
 		else {
@@ -473,6 +476,9 @@ public class TrangChuController {
 				thaoTacCTHD.Sua(cth);
 				
 				thongTin.append("Tên sản phẩm: " + listItemCart.get(i).getTenSanPham() + " - Số lượng: " + listItemCart.get(i).getSoLuong() +"\n");
+				
+			}
+			for (int i = 0; i < listItemCart.size(); i++) {
 				listItemCart.remove(i);
 			}
 		//	emailDAO.sendEmail(kh.getEmail(), "Mua hàng thành công_HQNShop", thongTin.toString());
@@ -497,6 +503,12 @@ public class TrangChuController {
 		model.addAttribute("listTP", getTinhThanh());
 		model.addAttribute("diachi", new DiaChi());
 		return "info";
+	}
+	
+	@GetMapping("/quanlydonhang")
+	public String thongTinDonHang(Model model,Principal principal) {
+		kiemTraTaiKhoan(model,principal);
+		return "quanlydonhang";
 	}
 	
 	

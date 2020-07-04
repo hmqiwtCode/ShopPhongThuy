@@ -48,7 +48,7 @@ public class NhanVien implements Serializable {
 
 	@OneToMany(mappedBy = "nv", fetch = FetchType.EAGER) // con cho nay nua mappedBy
 	@Fetch(value = FetchMode.SUBSELECT)
-	private List<HoaDon> listhd;
+	private List<HoaDon> listhoadon;
 
 	public NhanVien(String manv,String ho, String tennv, String sdt, String email, String gioitinh, LocalDate ngaysinh) {
 		super();
@@ -139,12 +139,14 @@ public class NhanVien implements Serializable {
 		this.taikhoan = taikhoan;
 	}
 
-	public List<HoaDon> getListhd() {
-		return listhd;
+	
+
+	public List<HoaDon> getListhoadon() {
+		return listhoadon;
 	}
 
-	public void setListhd(List<HoaDon> listhd) {
-		this.listhd = listhd;
+	public void setListhoadon(List<HoaDon> listhoadon) {
+		this.listhoadon = listhoadon;
 	}
 
 	@Override
