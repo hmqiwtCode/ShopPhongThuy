@@ -19,7 +19,7 @@ function viewProduct(id) {
             + "<div class='modal-dialog modal-lg' role='document'>"
             + "<div class='modal-content'>"
             + "<div class='modal-header'>"
-            + "<h5 class='modal-title'>Product Detail</h5>"
+            + "<h5 class='modal-title'>Thông tin sản phẩm</h5>"
             + "<button type='button' class='close' data-dismiss='modal' aria-label='Close'>"
             + "<span aria-hidden='true'>&times;</span>"
             + "</button>"
@@ -39,6 +39,7 @@ function viewProduct(id) {
             + "<div class='modal-footer'>"
             + "<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>"
             + "<button type='button' id ='please' class='btn btn-primary' name='"+id+"'>Add Cart</button>"
+            + "<button type='button'  class='btn btn-danger xemchitiet' name='"+id+"'>Xem chi tiết</button>"
             + "</div>"
             + "</div>"
             + "</div>"
@@ -95,7 +96,14 @@ $('#products').on('click', '#please',function(event) {
 		
 
 	})
+});
+
+$('#products').on('click', '.xemchitiet',function(event) {
+    var idProduct = $(this).attr('name');
+    var id = idProduct.slice(1);
+	window.location = "xemchitiet/" + id;
 })
+
 
 	
 })

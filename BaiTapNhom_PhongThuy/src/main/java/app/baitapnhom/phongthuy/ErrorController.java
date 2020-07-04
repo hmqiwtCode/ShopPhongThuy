@@ -15,7 +15,7 @@ public class ErrorController {
          
         ModelAndView errorPage = new ModelAndView("ErrorPage");
         String errorMsg = "";
-        int httpErrorCode = getErrorCode(httpRequest);
+        int httpErrorCode = 0;//getErrorCode(httpRequest);
  
         switch (httpErrorCode) {
             case 400: {
@@ -39,9 +39,9 @@ public class ErrorController {
         return errorPage;
     }
      
-    private int getErrorCode(HttpServletRequest httpRequest) {
-        return (Integer) httpRequest
-          .getAttribute("javax.servlet.error.status_code");
-    }
+	/*
+	 * private int getErrorCode(HttpServletRequest httpRequest) { return (Integer)
+	 * httpRequest .getAttribute("javax.servlet.error.status_code"); }
+	 */
 
 }

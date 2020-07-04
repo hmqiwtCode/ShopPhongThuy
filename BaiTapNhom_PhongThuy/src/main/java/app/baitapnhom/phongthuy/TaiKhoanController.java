@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import app.baitapnhom.dao.EmailDAO;
 import app.baitapnhom.entities.KhachHang;
 import app.baitapnhom.entities.TaiKhoan;
 import app.baitapnhom.service.TaiKhoanService;
@@ -27,7 +28,7 @@ public class TaiKhoanController {
 	@Autowired 
 	private ThaoTacSanPhamService<KhachHang> thaoTacKhachHang;
 
-	
+	EmailDAO emailDAO = new EmailDAO();
 
 	@PostMapping("/taikhoandangky")
 	@ResponseBody
@@ -49,9 +50,11 @@ public class TaiKhoanController {
 				return "Email này đã tồn tại trong hệ thống";
 			}
 			else {
+				
 				tkService.themTaiKhoan(taiKhoan);
 				kh.setTaikhoan(taiKhoan);
 				thaoTacKhachHang.Them(kh);
+				emailDAO.sendEmail(kh.getEmail(), "Đăng ký tài khoản_HQNShop", "Đăng ký tài khoản thành công\nThông tin tài khoản:\nUsername: " + kh.getMa() + "\n" + "Password: " + password);
 				return "Thêm tài khoản thành công";
 			}
 			

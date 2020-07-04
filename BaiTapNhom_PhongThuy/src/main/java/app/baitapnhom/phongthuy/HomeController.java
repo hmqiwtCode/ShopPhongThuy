@@ -52,7 +52,7 @@ public class HomeController {
 	@GetMapping("/test")
 	public String test(Model model) {
 		
-		return "login";
+		return "info";
 	}
 	
 	@Autowired

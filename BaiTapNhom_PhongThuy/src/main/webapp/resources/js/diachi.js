@@ -1,5 +1,8 @@
 $(document).ready(
+		
+		
 		function() {
+			var origin   = window.location.origin;
 			$("#tinh").on(
 					'change',
 					function(event) {
@@ -8,7 +11,7 @@ $(document).ready(
 						Huyen.id = b;
 						$.ajax({
 							contentType : 'application/json;charset=UTF-8',
-							url : 'getHuyen',
+							url : origin +'/phongthuy/checkout/getHuyen',
 							type : 'post',
 							data : JSON.stringify(Huyen),
 							success : function(response) {
@@ -35,12 +38,14 @@ $(document).ready(
 			$("#huyen").on(
 					'change',
 					function(event) {
+						
+						var origin   = window.location.origin;
 						var b = $("#huyen option:selected").val();
 						var Xa = {};
 						Xa.quanhuyenid = b;
 						$.ajax({
 							contentType : 'application/json;charset=UTF-8',
-							url : 'getXa',
+							url : origin +'/phongthuy/checkout/getXa',
 							type : 'POST',
 							data : JSON.stringify(Xa),
 							success : function(response) {
@@ -64,6 +69,7 @@ $(document).ready(
 					});
 
 			$("#themdc").on('click', function(event) {
+				var origin   = window.location.origin;
 				event.preventDefault();
 				var thanhpho = $("#tinh option:selected").text();
 				var quan = $("#huyen option:selected").text();
@@ -78,7 +84,7 @@ $(document).ready(
 				DiaChi.sonha = sonha;
 				$.ajax({
 					contentType : 'application/json;charset=UTF-8',
-					url : 'themDiaChi',
+					url : origin + '/phongthuy/checkout/themDiaChi',
 					type : 'POST',
 					data : JSON.stringify(DiaChi),
 					success : function(response) {
@@ -89,7 +95,7 @@ $(document).ready(
 						    text: "",
 						    type: "success"
 						}).then(function() {
-						    window.location = "shipping";
+						    window.location = origin + "/phongthuy/checkout/shipping";
 						});
 					},
 					error : function(result) {

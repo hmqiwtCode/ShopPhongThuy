@@ -42,6 +42,40 @@ public class SanPhamDAOImpl implements SanPhamDAO {
 		Session session = sessionFactory.getCurrentSession();
 		return session.find(SanPham.class, id);
 	}
+	
+	
+	@Override
+	public List<SanPham> getSPbyName(String tensp) {
+		Session session = sessionFactory.getCurrentSession();
+		return session.createNativeQuery("select * from sanpham where tensp like N'%"+tensp+"%'", SanPham.class).getResultList();
+	}
+
+	@Override
+	public boolean suaSanPham(SanPham sp) {
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			session.update(sp);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	
+	}
+
+	@Override
+	public boolean deleteSanPham(int id) {
+		Session session = sessionFactory.getCurrentSession();
+		
+		SanPham sp = session.load(SanPham.class, new Integer(id));
+		if(sp!=null) {
+			session.delete(sp);
+			return true;
+		}
+		return false;
+	}
+
 
 	
 	

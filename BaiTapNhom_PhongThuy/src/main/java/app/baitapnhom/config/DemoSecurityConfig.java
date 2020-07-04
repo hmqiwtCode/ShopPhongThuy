@@ -31,8 +31,6 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/admin/**").hasRole("QUANLY")
 		.antMatchers("/checkout/shipping/**").hasRole("KHACHHANG")
 		.antMatchers("/checkout/payment/**").hasRole("KHACHHANG")
-		.antMatchers("/checkout/shipping/**").hasRole("QUANLY")
-		.antMatchers("/checkout/payment/**").hasRole("QUANLY")
 		.and()
 		.formLogin().loginPage("/showMyLoginPage")
 		.loginProcessingUrl("/authenticateTheUser")

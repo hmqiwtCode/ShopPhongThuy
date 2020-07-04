@@ -35,5 +35,27 @@ public class SanPhamServiceImpl implements SanPhamService {
 	public SanPham getSanPhamByID(int id) {
 		return spDAO.getSanPhamByID(id);
 	}
+	
+	
+	@Override
+	@Transactional
+	public List<SanPham> getSPbyName(String tensp) {
+		
+		return spDAO.getSPbyName(tensp);
+	}
+
+	@Override
+	@Transactional
+	public boolean suaSanPham(SanPham sp) {
+		boolean check = spDAO.suaSanPham(sp);
+		return check;
+	}
+
+	@Override
+	@Transactional
+	public boolean deleteSanPham(int id) {
+		
+		return spDAO.deleteSanPham(id);
+	}
 
 }

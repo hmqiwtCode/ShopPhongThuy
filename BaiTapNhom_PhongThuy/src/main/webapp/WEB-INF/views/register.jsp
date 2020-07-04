@@ -275,6 +275,7 @@ section {
 					<p>
 						<a href="contact.html">FAQs</a>
 					</p>
+
 				</div>
 				<div class="col-md-3">
 					<h4>Get in touch</h4>

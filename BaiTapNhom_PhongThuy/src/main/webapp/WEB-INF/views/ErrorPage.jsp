@@ -1,15 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<meta charset="utf-8">
+<title>404</title>
 <style type="text/css">
+
 .page_404 {
+	margin :0px auto;
 	padding: 40px 0;
 	background: #fff;
 	font-family: 'Arvo', serif;
+	width:750px;
 }
 
 .page_404  img {
@@ -37,10 +40,12 @@
 	background: #39ac31;
 	margin: 20px 0;
 	display: inline-block;
+	text-decoration: none;
 }
 
 .contant_box_404 {
 	margin-top: -50px;
+	
 }
 </style>
 </head>
@@ -57,11 +62,11 @@
 						</div>
 
 						<div class="contant_box_404">
-							<h3 class="h2">Look like you're lost</h3>
+							<h3 class="h2">Không tồn tại trang này</h3>
 
-							<p>the page you are looking for not avaible!</p>
+							<p>Trang bạn tìm kiếm không tồn tại</p>
 
-							<a href="" class="link_404">Go to Home</a>
+							<a href="${pageContext.request.contextPath}" class="link_404">Trang chủ</a>
 						</div>
 					</div>
 				</div>

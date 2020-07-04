@@ -1,7 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <header>
-
+	
 	<nav class="navbar navbar-expand-sm navbar-light bg-light" id="header">
-		<a class="navbar-brand" href="index.html">HQN Store</a>
+		<a class="navbar-brand" href="${pageContext.request.contextPath}">HQN Store</a>
 		<button class="navbar-toggler d-lg-none" type="button"
 			data-toggle="collapse" data-target="#collapsibleNavId"
 			aria-controls="collapsibleNavId" aria-expanded="false"
@@ -35,13 +37,13 @@
 					<i class="fa fa-search"></i>
 				</button>
 			</form>
-			<form action="checkout/cart?item=shopitem" method="get">
+			<form action="${pageContext.request.contextPath}/checkout/cart" method="get">
 				<button type="submit" class="btn btn-primary"
 					style="margin-left: 20px">
-					Cart <span id="soluong" class="badge badge-light">${sl}</span>
+					Cart <span id="soluong" class="badge badge-light">${soSP}</span>
 				</button>
 			</form>
-			<span><a href="login.html"> Sign In <i
+			<span><a href="login.html"> Đăng nhập <i
 					class="fa fa-sign-in-alt"></i></a></span>
 		</div>
 	</nav>

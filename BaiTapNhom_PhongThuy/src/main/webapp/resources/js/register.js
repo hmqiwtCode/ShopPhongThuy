@@ -18,16 +18,16 @@ $(document).ready(function()
 					
 		  rules:
 		  {
-				makh: {
+				ma: {
 					required: true,
 					validname: true,
 					minlength: 8
 				},
-				tenkh: {
+				ten: {
 					required: true,
 					minlength: 4
 				},
-				hokh: {
+				ho: {
 					required: true,
 					minlength: 4
 				},
@@ -55,7 +55,7 @@ $(document).ready(function()
 		   },
 		   messages:
 		   {
-				makh: {
+				ma: {
 					required: "Nhập tên tài khoản",
 					validname: "Tên không chứa ký tự đặc biệt",
 					minlength: "Tối thiểu 8 ký tự"
@@ -63,12 +63,12 @@ $(document).ready(function()
 				ngaysinh1:{
 					required: "Nhập ngày sinh"
 				},
-				hokh:{
+				ho:{
 					required: "Nhập họ",
 					validname: "Tên không chứa ký tự đặc biệt",
 					minlength: "Tối thiểu 4 ký tự"
 				},
-				tenkh:{
+				ten:{
 					required: "Nhập tên",
 					validname: "Tên không chứa ký tự đặc biệt",
 					minlength: "Tối thiểu 4 ký tự"
@@ -102,6 +102,15 @@ $(document).ready(function()
 		   },
 		   
 		   submitHandler: function(form) {
+			   swal({
+				    title: 'Vui lòng đợi',
+				    allowEscapeKey: false,
+				    allowOutsideClick: false,
+				    timer: 4000,
+				    onOpen: () => {
+				      swal.showLoading();
+				    }
+				  });
 			   $.ajax({
 		            url: form.action,
 		            type: form.method,

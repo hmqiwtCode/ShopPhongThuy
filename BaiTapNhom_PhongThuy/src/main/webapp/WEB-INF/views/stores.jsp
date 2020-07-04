@@ -29,7 +29,8 @@
 	href="${pageContext.request.contextPath}/resources/css/contact.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/general.css">
-
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/button.css">
 <style type="text/css">
 .col-md-3 {
 	margin-top: 10px;
@@ -89,17 +90,17 @@
 	</section>
 	<section class="categories margin-t-50 margin-b-50">
 		<div class="container">
-			<h1 style="text-align: center; color: green">All Feng Shui</h1>
+			<h1 style="text-align: center; color: green">HQNShop</h1>
 			<br>
 			<br>
-			<h4 style="text-align: left; color: gray">Search by:</h4>
+			<h4 style="text-align: left; color: gray">Tìm kiếm theo:</h4>
 			<div class="row" id="products1">
 				<div class="col-md-12" id="timLoai">
 
 					<div class="card">
 						<ul class="nav justify-content-start">
 							<li class="nav-item"><a class="nav-link disabled" href="#"
-								style="margin-right: 10px">Loai San Pham:</a></li>
+								style="margin-right: 10px">Loại sản phẩm:</a></li>
 							<li class="nav-item"><a class="nav-link" href="#">Normal</a>
 							</li>
 							<li class="nav-item"><a class="nav-link" href="#">VIP</a></li>
@@ -112,11 +113,10 @@
 					<div class="card">
 						<ul class="nav justify-content-start">
 							<li class="nav-item"><a class="nav-link disabled" href="#"
-								style="margin-right: 10px">Nha cung cap:</a></li>
+								style="margin-right: 10px">Nhà cung cấp:</a></li>
 							<li class="nav-item"><a class="nav-link" href="#">Ngoc
 									Vang IC</a></li>
-							<li class="nav-item"><a class="nav-link" href="#">Golden
-									Feng</a></li>
+							<li class="nav-item"><a class="nav-link" href="#"></a></li>
 
 						</ul>
 					</div>

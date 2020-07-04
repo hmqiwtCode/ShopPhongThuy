@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import app.baitapnhom.dao.EmailDAO;
 import app.baitapnhom.ediachi.Huyen;
 import app.baitapnhom.ediachi.Tinh;
 import app.baitapnhom.ediachi.Xa;
@@ -50,7 +52,7 @@ import app.baitapnhom.service.SanPhamService;
 import app.baitapnhom.service.ThaoTacSanPhamService;
 
 @Controller
-@SessionAttributes({ "listItemCart" })
+@SessionAttributes(value = { "listItemCart","sl" })
 public class TrangChuController {
 
 	@Autowired
@@ -79,11 +81,20 @@ public class TrangChuController {
 
 	@Autowired
 	private SanPhamService spService;
+	
+	EmailDAO emailDAO = new EmailDAO();
 
 	@ModelAttribute("listItemCart")
 	public List<ItemCart> createListItemCart() {
 		System.out.println("1");
 		return new ArrayList<ItemCart>();
+	}
+	
+	@ModelAttribute("sl")
+	public int soLuong() {
+		System.out.println("chay");
+		int sl = 0;
+		return sl;
 	}
 
 	@RequestMapping(value = { "/", "/trangchu" })
@@ -97,8 +108,9 @@ public class TrangChuController {
 			}
 				
 		}
+		
 		model.addAttribute("listSPController", listChuyen);
-		model.addAttribute("sl", String.valueOf(listItemCart.size()));
+		model.addAttribute("soSP", String.valueOf(listItemCart.size()));
 		return "stores";
 	}
 
@@ -127,9 +139,19 @@ public class TrangChuController {
 			cartSL.setSoLuong(cartSL.getSoLuong() + 1);
 
 		}
+	
 		// model.addAttribute("listItemCart", listItemCart);
 		return String.valueOf(listItemCart.size());
 	}
+	
+	
+	@GetMapping(value = "/xemchitiet/{id}")
+	public String xemChiTiet(Model model,@PathVariable int id) {
+		SanPham sp = spService.getSanPhamByID(id);
+		model.addAttribute("ctsp", sp);
+		return "chitiet";
+	}
+	
 
 	@GetMapping("/checkout/cart")
 	public String hienThiCartItem(Model model, @ModelAttribute("listItemCart") List<ItemCart> listItemCart) {
@@ -327,7 +349,9 @@ public class TrangChuController {
 			if (listKH.get(i).getMa().equals(principal.getName()))
 				kh = listKH.get(i);
 		}
-		kh.setListdiachi(Arrays.asList(diaChi));
+		List<DiaChi> dccc = kh.getListdiachi();
+		dccc.add(diaChi);
+		kh.setListdiachi(dccc);
 		thaoTacKhachHang.Sua(kh);
 		return "Thành Công";
 	}
@@ -369,25 +393,26 @@ public class TrangChuController {
 		model.addAttribute("tongTien", tongTien);
 		return "payment";
 	}
-
+	private static String maDHS = null;
 	@PostMapping("/checkout/mua")
 	@ResponseBody
 	public String themHoaDon(Principal principal,@ModelAttribute("listItemCart") List<ItemCart> listItemCart) {
-		String ma = "maHD";
+		String ma = "HD_";
 		String chuy = "";
 		NhanVien nv = null;
 		HoaDon hd = null;
 		KhachHang kh = null;
+		StringBuilder sb = new StringBuilder();
 		List<HoaDon> listHoaDon = thaoTacHoaDon.getTatCa(HoaDon.class);
 		if (listHoaDon.size() == 0)
-			ma = ma + String.valueOf(0);
+			ma = ma + String.valueOf(10000);
 		else
-			ma = ma + String.valueOf(listHoaDon.size());
-		System.out.println(ma);
+			ma = ma + String.valueOf(10000 + listHoaDon.size());
+		maDHS = ma;
 		@SuppressWarnings("unchecked")
 		List<SimpleGrantedAuthority> authorities = (List<SimpleGrantedAuthority>) SecurityContextHolder.getContext()
 				.getAuthentication().getAuthorities();
-		StringBuilder sb = new StringBuilder();
+		StringBuilder thongTin = new StringBuilder();
 		for (int i = 0; i < authorities.size(); i++) {
 			sb.append(authorities.get(i).toString());
 		}
@@ -404,6 +429,7 @@ public class TrangChuController {
 				
 			}
 			thaoTacHoaDon.Them(hd);
+			thongTin.append("Tổng số: " + listItemCart.size() + " sản phẩm\n");
 			for (int i = 0; i < listItemCart.size(); i++) {
 				SanPham sp = null;
 				sp = sPService.getSanPhamByID((listItemCart.get(i).getMaSanPham()));
@@ -415,7 +441,13 @@ public class TrangChuController {
 				cth.setSanpham(sp);
 				cth.setHoadon(hd);
 				thaoTacCTHD.Sua(cth);
+				
+				
+				thongTin.append("Tên sản phẩm: " + listItemCart.get(i).getTenSanPham() + " - Số lượng: " + listItemCart.get(i).getSoLuong() +"\n");
+				listItemCart.remove(i);
+				
 			}
+			emailDAO.sendEmail(nv.getEmail(), "Mua hàng thành công_HQNShop", thongTin.toString());
 		}
 		else {
 			List<KhachHang> listKhachHangs = thaoTacKhachHang.getTatCa(KhachHang.class);
@@ -427,6 +459,7 @@ public class TrangChuController {
 				}
 			}
 			thaoTacHoaDon.Them(hd);
+			thongTin.append("Tổng số: " + listItemCart.size() + " sản phẩm\n");
 			for (int i = 0; i < listItemCart.size(); i++) {
 				SanPham sp = null;
 				sp = sPService.getSanPhamByID((listItemCart.get(i).getMaSanPham()));
@@ -438,11 +471,35 @@ public class TrangChuController {
 				cth.setSanpham(sp);
 				cth.setHoadon(hd);
 				thaoTacCTHD.Sua(cth);
+				
+				thongTin.append("Tên sản phẩm: " + listItemCart.get(i).getTenSanPham() + " - Số lượng: " + listItemCart.get(i).getSoLuong() +"\n");
+				listItemCart.remove(i);
 			}
+		//	emailDAO.sendEmail(kh.getEmail(), "Mua hàng thành công_HQNShop", thongTin.toString());
+			
 		}
 		
 		
-		return "";
+		return "Thành công";
 	}
+	
+	@PostMapping("/checkout/donhangmua")
+	public String donHangMua(Model model) {
+		model.addAttribute("tenhd", maDHS);
+		return "complete";
+		
+	}
+	
+	
+	@GetMapping("/thongtincanhan")
+	public String thongTinCaNhan(Model model,Principal principal) throws MalformedURLException, IOException, InterruptedException {
+		kiemTraTaiKhoan(model,principal);
+		model.addAttribute("listTP", getTinhThanh());
+		model.addAttribute("diachi", new DiaChi());
+		return "info";
+	}
+	
+	
+	
 
 }
