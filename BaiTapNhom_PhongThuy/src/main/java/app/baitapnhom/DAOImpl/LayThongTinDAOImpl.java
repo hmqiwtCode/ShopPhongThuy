@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import app.baitapnhom.dao.LayThongTinDAO;
+import app.baitapnhom.entities.HoaDon;
 import app.baitapnhom.entities.KhachHang;
 import app.baitapnhom.entities.LoaiSanPham;
 import app.baitapnhom.entities.NhaCungCap;
@@ -114,6 +115,13 @@ public class LayThongTinDAOImpl implements LayThongTinDAO{
 			
 			return false;
 		}
+	}
+
+	@Override
+	public List<HoaDon> getListHoaDon() {
+		
+		Session session = sessionFactory.getCurrentSession();
+		return session.createNativeQuery("select * from hoadon order by convert(datetime, ngaylap, 103) ASC", HoaDon.class).getResultList();
 	}
 
 	

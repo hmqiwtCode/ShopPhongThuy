@@ -2,6 +2,7 @@ package app.baitapnhom.dao;
 
 import java.util.List;
 
+import app.baitapnhom.entities.HoaDon;
 import app.baitapnhom.entities.LoaiSanPham;
 import app.baitapnhom.entities.NhaCungCap;
 import app.baitapnhom.entities.NuocSanXuat;
@@ -17,6 +18,8 @@ public interface LayThongTinDAO {
 	public boolean deleteNCC(String id);
 	public boolean deleteLoai(String id);
 	public boolean deleteNuoc(String id);
+	
+	public List<HoaDon> getListHoaDon();
 
 
 }

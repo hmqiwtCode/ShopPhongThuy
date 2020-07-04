@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.baitapnhom.dao.LayThongTinDAO;
+import app.baitapnhom.entities.HoaDon;
 import app.baitapnhom.entities.LoaiSanPham;
 import app.baitapnhom.entities.NhaCungCap;
 import app.baitapnhom.entities.NuocSanXuat;
@@ -78,6 +79,12 @@ public class LayThongTinServiceImpl implements LayThongTinService{
 	public boolean deleteNuoc(String id) {
 		return dao.deleteNuoc(id);
 		
+	}
+
+	@Override
+	@Transactional
+	public List<HoaDon> getListHoaDon() {
+		return dao.getListHoaDon();
 	}
 
 }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import app.baitapnhom.entities.HoaDon;
 import app.baitapnhom.entities.LoaiSanPham;
 import app.baitapnhom.entities.NhaCungCap;
 import app.baitapnhom.entities.NuocSanXuat;
@@ -47,6 +48,8 @@ public class AdminController_SanPham {
 
 	@Autowired
 	private ThaoTacSanPhamService<NuocSanXuat> thaoTacNuocSX;
+	
+	
 
 	@Autowired
 	private LayThongTinService layThongTinService;
@@ -63,6 +66,7 @@ public class AdminController_SanPham {
 		model.addAttribute("listNCC2", thaoTacNCC.getTatCa(NhaCungCap.class));
 		model.addAttribute("listLoaiSPI2", thaoTacLoaiSP.getTatCa(LoaiSanPham.class));
 		model.addAttribute("listNuocSXI2", thaoTacNuocSX.getTatCa(NuocSanXuat.class));
+		model.addAttribute("lHoaDon", layThongTinService.getListHoaDon());
 		return "quanly";
 	}
 	@GetMapping("/themsanpham2")
@@ -74,7 +78,7 @@ public class AdminController_SanPham {
 		model.addAttribute("listNCC", thaoTacNCC.getTatCa(NhaCungCap.class));
 		model.addAttribute("listLoaiSPI", thaoTacLoaiSP.getTatCa(LoaiSanPham.class));
 		model.addAttribute("listNuocSXI", thaoTacNuocSX.getTatCa(NuocSanXuat.class));
-	
+		
 		
 		return "themsanpham";
 	}
@@ -474,6 +478,8 @@ public class AdminController_SanPham {
         String saltStr = salt.toString();
         return saltStr;
 	}
+	
+	
 	
 	
 	
